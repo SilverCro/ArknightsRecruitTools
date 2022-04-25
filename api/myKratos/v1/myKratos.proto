@@ -1,0 +1,81 @@
+syntax = "proto3";
+
+package myKratos.v1;
+
+import "google/api/annotations.proto";
+
+option go_package = "kratosTest/api/myKratos/v1;v1";
+
+// myKratos服务
+service myKratos {
+  // 模板自带SayHello api用于测试
+  rpc SayHello (HelloRequest) returns (HelloReply)  {
+    option (google.api.http) = {
+      // 定义一个 GET 接口，并且把 name 映射到 HelloRequest
+      get: "/helloworld/{name}",
+
+    };
+  }
+  // 实现明日方舟公开招募图片识别并返回推荐tag选择
+  rpc ArkRecruitRecommendTool (ArkRecruitRecommendRequest) returns (ArkRecruitRecommendReply)  {
+    option (google.api.http) = {
+        // post接口地址为
+        post: "/api/ark/tools/recruit/recommend",
+        body: "*",
+    };
+  }
+  // 实现查询明日方舟干员信息
+  rpc GetArkOperatorInfo (GetArkOperatorInfoRequest) returns (GetArkOperatorInfoReply)  {
+    option (google.api.http) = {
+      // post接口地址为
+      get: "/api/ark/tools/operator/{name}",
+
+    };
+  }
+
+
+}
+// SayHello api 请求格式
+message HelloRequest {
+  string name = 1;
+}
+
+// SayHello api 返回格式
+message HelloReply {
+  string message = 1;
+}
+
+// ArkRecruitImageTool api 请求格式
+message ArkRecruitRecommendRequest {
+  repeated string tags = 1;
+}
+
+// ArkRecruitImageTool api 返回格式
+message ArkRecruitRecommendReply {
+  string status = 1;
+  repeated string recommendTags = 2;
+  message ArkOperatorInfo {
+    string name = 1;
+    repeated string tarList = 2;
+    string  profession = 3;
+    int32 rarity = 4;
+  }
+  repeated ArkOperatorInfo  recommendOperatorInfo = 3;
+}
+
+// GetArkOperatorInfo api 请求格式
+message GetArkOperatorInfoRequest {
+  string name = 1;
+}
+
+// GetArkOperatorInfo api 返回格式
+message  GetArkOperatorInfoReply {
+  message ArkOperatorInfo {
+    string name = 1;
+    repeated string tarList = 2;
+    string  profession = 3;
+    int32 rarity = 4;
+  }
+  ArkOperatorInfo arkOperatorInfo = 1;
+}
+

@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package myKratos.v1;
+
+option go_package = "kratosTest/api/myKratos/v1;v1";
+
+
+enum ErrorReason {
+  GEETER_UNSPECIFIED = 0;
+  USER_NOT_FOUND = 1;
+}

@@ -1,0 +1,174 @@
+# Generated with protoc-gen-openapi
+# https://github.com/google/gnostic/tree/master/cmd/protoc-gen-openapi
+
+openapi: 3.0.3
+info:
+    title: MyKratos API
+    description: myKratos服务
+    version: 0.0.1
+paths:
+    /api/ark/tools/operator/{name}:
+        get:
+            tags:
+                - MyKratos
+            description: 实现查询明日方舟干员信息
+            operationId: MyKratos_GetArkOperatorInfo
+            parameters:
+                - name: name
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetArkOperatorInfoReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /api/ark/tools/recruit/recommend:
+        post:
+            tags:
+                - MyKratos
+            description: 实现明日方舟公开招募图片识别并返回推荐tag选择
+            operationId: MyKratos_ArkRecruitRecommendTool
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/ArkRecruitRecommendRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ArkRecruitRecommendReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /helloworld/{name}:
+        get:
+            tags:
+                - MyKratos
+            description: 模板自带SayHello api用于测试
+            operationId: MyKratos_SayHello
+            parameters:
+                - name: name
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/HelloReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+components:
+    schemas:
+        ArkRecruitRecommendReply:
+            type: object
+            properties:
+                status:
+                    type: string
+                recommendTags:
+                    type: array
+                    items:
+                        type: string
+                recommendOperatorInfo:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/ArkRecruitRecommendReply_ArkOperatorInfo'
+            description: ArkRecruitImageTool api 返回格式
+        ArkRecruitRecommendReply_ArkOperatorInfo:
+            type: object
+            properties:
+                name:
+                    type: string
+                tarList:
+                    type: array
+                    items:
+                        type: string
+                profession:
+                    type: string
+                rarity:
+                    type: integer
+                    format: int32
+        ArkRecruitRecommendRequest:
+            type: object
+            properties:
+                tags:
+                    type: array
+                    items:
+                        type: string
+            description: ArkRecruitImageTool api 请求格式
+        GetArkOperatorInfoReply:
+            type: object
+            properties:
+                arkOperatorInfo:
+                    $ref: '#/components/schemas/GetArkOperatorInfoReply_ArkOperatorInfo'
+            description: GetArkOperatorInfo api 返回格式
+        GetArkOperatorInfoReply_ArkOperatorInfo:
+            type: object
+            properties:
+                name:
+                    type: string
+                tarList:
+                    type: array
+                    items:
+                        type: string
+                profession:
+                    type: string
+                rarity:
+                    type: integer
+                    format: int32
+        GoogleProtobufAny:
+            type: object
+            properties:
+                '@type':
+                    type: string
+                    description: The type of the serialized message.
+            additionalProperties: true
+            description: Contains an arbitrary serialized message along with a @type that describes the type of the serialized message.
+        HelloReply:
+            type: object
+            properties:
+                message:
+                    type: string
+            description: SayHello api 返回格式
+        Status:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    description: The status code, which should be an enum value of [google.rpc.Code][google.rpc.Code].
+                    format: int32
+                message:
+                    type: string
+                    description: A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the [google.rpc.Status.details][google.rpc.Status.details] field, or localized by the client.
+                details:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/GoogleProtobufAny'
+                    description: A list of messages that carry the error details.  There is a common set of message types for APIs to use.
+            description: 'The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).'
+tags:
+    - name: MyKratos
