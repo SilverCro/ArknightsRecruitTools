@@ -2,9 +2,10 @@ package main
 
 import (
 	"flag"
+	"fmt"
+	"io"
 	"os"
 
-	"kratosTest/internal/conf"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/config"
 	"github.com/go-kratos/kratos/v2/config/file"
@@ -12,6 +13,7 @@ import (
 	"github.com/go-kratos/kratos/v2/middleware/tracing"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
+	"kratosTest/internal/conf"
 )
 
 // go build -ldflags "-X main.Version=x.y.z"
@@ -45,8 +47,17 @@ func newApp(logger log.Logger, hs *http.Server, gs *grpc.Server) *kratos.App {
 }
 
 func main() {
+	var f1 *os.File
+
+	if f, err := os.OpenFile("../../log/log.log", os.O_CREATE|os.O_RDWR|os.O_APPEND, os.ModeAppend|os.ModePerm); err != nil {
+		fmt.Println(err)
+	} else {
+		f1 = f
+	}
+	//write := bufio.NewWriter(f1)
+	multiWriter := io.MultiWriter(os.Stdout, f1)
 	flag.Parse()
-	logger := log.With(log.NewStdLogger(os.Stdout),
+	logger := log.With(log.NewStdLogger(multiWriter),
 		"ts", log.DefaultTimestamp,
 		"caller", log.DefaultCaller,
 		"service.id", id,
@@ -60,7 +71,12 @@ func main() {
 			file.NewSource(flagconf),
 		),
 	)
-	defer c.Close()
+	defer func(c config.Config) {
+		err := c.Close()
+		if err != nil {
+			panic(err)
+		}
+	}(c)
 
 	if err := c.Load(); err != nil {
 		panic(err)
