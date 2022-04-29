@@ -18,7 +18,6 @@ vendor/
 # Compiled Object files, Static and Dynamic libs (Shared Objects)
 *.o
 *.a
-*.so
 
 # OS General
 Thumbs.db
@@ -34,3 +33,4 @@ bin/
 .vscode/
 .idea/
 *.swp
+ArkRecruitImageTool接口开发备忘录.md

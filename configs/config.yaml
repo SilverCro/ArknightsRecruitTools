@@ -11,7 +11,7 @@ data:
     source: root:root@tcp(127.0.0.1:3306)/test
   redis:
     addr: 110.40.221.138:6880
-    password: 19681112gzp8
+    password: 123456
     DB: 0
     dial_timeout: 1s
     read_timeout: 0.4s
