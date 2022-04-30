@@ -53,16 +53,19 @@ message ArkRecruitRecommendRequest {
 // ArkRecruitImageTool api 返回格式
 message ArkRecruitRecommendReply {
   string status = 1;
-  repeated string recommendTags = 2;
-  message ArkOperatorInfo {
-    string name = 1;
-    repeated string tarList = 2;
-    string  profession = 3;
-    int32 rarity = 4;
-  }
-  repeated ArkOperatorInfo  recommendOperatorInfo = 3;
-}
+  repeated RecruitRecommend recruitRecommends = 2;
 
+}
+message ArkOperatorInfo {
+  string name = 1;
+  repeated string tarList = 2;
+  string  profession = 3;
+  int32 rarity = 4;
+}
+message RecruitRecommend{
+  repeated string recommendTags = 1;
+  repeated ArkOperatorInfo  recommendOperatorInfos = 2;
+}
 // GetArkOperatorInfo api 请求格式
 message GetArkOperatorInfoRequest {
   string name = 1;

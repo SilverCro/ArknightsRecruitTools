@@ -1,17 +1,17 @@
 server:
   http:
     addr: 0.0.0.0:8000
-    timeout: 1s
+    timeout: 3s
   grpc:
     addr: 0.0.0.0:9000
-    timeout: 1s
+    timeout: 3s
 data:
   database:
     driver: mysql
     source: root:root@tcp(127.0.0.1:3306)/test
   redis:
-    addr: 110.40.221.138:6880
-    password: 123456
+    addr: 172.17.0.2:6379
+    password: "123456"
     DB: 0
     dial_timeout: 1s
     read_timeout: 0.4s

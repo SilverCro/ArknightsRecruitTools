@@ -49,23 +49,16 @@ func (s *MyKratosService) ArkRecruitRecommendTool(ctx context.Context, in *v1.Ar
 	//if err != nil {
 	//	return nil, err
 	//}
-	arri, err := s.mu.GetRecruitRecommendInfo(ctx, &biz.ArkRecruitTags{Tags: in.Tags})
+	rs, arris, err := s.mu.GetRecruitRecommendInfo(ctx, &biz.ArkRecruitTags{Tags: in.Tags})
 	if err != nil {
 		return nil, err
 	}
-	recommendOperatorInfo := make([]*v1.ArkRecruitRecommendReply_ArkOperatorInfo, len(arri.RecommendOperatorInfo))
-	for index, val := range arri.RecommendOperatorInfo {
-		recommendOperatorInfo[index] = &v1.ArkRecruitRecommendReply_ArkOperatorInfo{
-			Name:       val.Name,
-			TarList:    val.TarList,
-			Profession: val.Profession,
-			Rarity:     val.Rarity,
-		}
+	recruitRecommends := make([]*v1.RecruitRecommend, len(arris))
+	for index, val := range arris {
+		recruitRecommends[index] = val.ToRecruitRecommend()
 	}
 	return &v1.ArkRecruitRecommendReply{
-		Status:                arri.State,
-		RecommendTags:         arri.RecommendTags,
-		RecommendOperatorInfo: recommendOperatorInfo,
+		Status:            rs,
+		RecruitRecommends: recruitRecommends,
 	}, nil
-
 }
