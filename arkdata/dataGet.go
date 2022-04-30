@@ -1,4 +1,4 @@
-package main
+package arkdata
 
 import (
 	"context"
@@ -248,7 +248,7 @@ func appendCharaTagList2Redis(rdb *redis.Client) {
 		nameList = val
 	}
 	m := make(map[int]string)
-	m[1] = "机械支援"
+	m[1] = "机械支援" // 支援机械
 	m[2] = "新手"
 	m[5] = "资深干员"
 	m[6] = "高级资深干员"
@@ -329,37 +329,47 @@ func readOneCharaDataFromRedis(rdb *redis.Client, searchName string) *ArkCharaRe
 }
 
 // 将tag数据存入redis数据库中 参数rdb为redis客户端
-//func writeTags2Redis(rdb *redis.Client)  {
-//	m := make(map[string]string)
-//	m[]
-//	tagStr := "控场 爆发 治疗 支援 费用回复 输出 生存 群攻 防护 减速 削弱 快速复活 位移 召唤 支援机械 " +
-//	"近卫干员 狙击干员 重装干员 医疗干员 辅助干员 术士干员 特种干员 先锋干员 " +
-//	"近战位 远程位 " +
-//	"新手 资深干员 高级资深干员"
-//	tagStrs := strings.Split(tagStr, " ")
-//	for _,val := tagStrs
-//
-//}
-func main() {
-	rdb := redis.NewClient(&redis.Options{
-		Addr:     "110.40.221.138:6880",
-		Password: "19681112gzp8", // no password set
-		DB:       0,              // use default DB
-	})
-
-	//modifyCharaprofession2Redis(rdb)
-	//appendCharaTagList2Redis(rdb)
-	var input string
-	for {
-		fmt.Scanf("%s\n", &input)
-		if input == "end" {
-			break
+func writeTags2Redis(rdb *redis.Client) {
+	ctx := context.Background()
+	//m := make(map[string][]string)
+	tagtypes := []string{"trait", "profession", "position", "rarity"}
+	tagStrs := []string{"控场 爆发 治疗 支援 费用回复 输出 生存 群攻 防护 减速 削弱 快速复活 位移 召唤 支援机械",
+		"近卫干员 狙击干员 重装干员 医疗干员 辅助干员 术士干员 特种干员 先锋干员",
+		"近战位 远程位",
+		"新手 资深干员 高级资深干员"}
+	for index, tagStr := range tagStrs {
+		tags := strings.Split(tagStr, " ")
+		for _, tag := range tags {
+			if err := rdb.SAdd(ctx, tagtypes[index]+":tagName:recruit", tag).Err(); err != nil {
+				panic(err)
+			}
 		}
-		fmt.Println(input)
-		arkCharaReadData := readOneCharaDataFromRedis(rdb, input)
-		fmt.Println(arkCharaReadData)
 	}
 
-	//arkCharaReadData := readOneCharaDataFromRedis(rdb, "陈")
-	//fmt.Println(arkCharaReadData)
 }
+
+//func main() {
+//	rdb := redis.NewClient(&redis.Options{
+//		Addr:     "110.40.221.138:6880",
+//		Password: "123456", // no password set
+//		DB:       0,        // use default DB
+//	})
+//
+//	//modifyCharaprofession2Redis(rdb)
+//	//appendCharaTagList2Redis(rdb)
+//
+//	writeTags2Redis(rdb)
+//	//var input string
+//	//for {
+//	//	fmt.Scanf("%s\n", &input)
+//	//	if input == "end" {
+//	//		break
+//	//	}
+//	//	fmt.Println(input)
+//	//	arkCharaReadData := readOneCharaDataFromRedis(rdb, input)
+//	//	fmt.Println(arkCharaReadData)
+//	//}
+//
+//	//arkCharaReadData := readOneCharaDataFromRedis(rdb, "陈")
+//	//fmt.Println(arkCharaReadData)
+//}

@@ -25,9 +25,9 @@ type Data struct {
 //}
 
 func NewRedis(c *conf.Data, logger log.Logger) (*Data, func(), error) {
-	log.NewHelper(logger).Info("message", c.Redis.Addr)
-	log.NewHelper(logger).Info("message", c.Redis.Password)
-	log.NewHelper(logger).Info("message", c.Redis.DB)
+	log.NewHelper(logger).Info("redisAddr", c.Redis.Addr)
+	log.NewHelper(logger).Info("redisPassword", c.Redis.Password)
+	log.NewHelper(logger).Info("redisDB", c.Redis.DB)
 	rdb := redis.NewClient(&redis.Options{
 		Addr:         c.Redis.Addr,
 		Password:     c.Redis.Password, // no password set
@@ -37,8 +37,10 @@ func NewRedis(c *conf.Data, logger log.Logger) (*Data, func(), error) {
 		ReadTimeout:  c.Redis.ReadTimeout.AsDuration(),
 	})
 	cleanup := func() {
-		rdb.Close()
-		log.NewHelper(logger).Info("closing the redis resources")
+		err := rdb.Close()
+		if err != nil {
+			return
+		}
 	}
 	return &Data{rdb: rdb}, cleanup, nil
 }

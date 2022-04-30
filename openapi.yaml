@@ -84,21 +84,7 @@ paths:
                                 $ref: '#/components/schemas/Status'
 components:
     schemas:
-        ArkRecruitRecommendReply:
-            type: object
-            properties:
-                status:
-                    type: string
-                recommendTags:
-                    type: array
-                    items:
-                        type: string
-                recommendOperatorInfo:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/ArkRecruitRecommendReply_ArkOperatorInfo'
-            description: ArkRecruitImageTool api 返回格式
-        ArkRecruitRecommendReply_ArkOperatorInfo:
+        ArkOperatorInfo:
             type: object
             properties:
                 name:
@@ -112,6 +98,16 @@ components:
                 rarity:
                     type: integer
                     format: int32
+        ArkRecruitRecommendReply:
+            type: object
+            properties:
+                status:
+                    type: string
+                recruitRecommends:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/RecruitRecommend'
+            description: ArkRecruitImageTool api 返回格式
         ArkRecruitRecommendRequest:
             type: object
             properties:
@@ -154,6 +150,17 @@ components:
                 message:
                     type: string
             description: SayHello api 返回格式
+        RecruitRecommend:
+            type: object
+            properties:
+                recommendTags:
+                    type: array
+                    items:
+                        type: string
+                recommendOperatorInfos:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/ArkOperatorInfo'
         Status:
             type: object
             properties:
