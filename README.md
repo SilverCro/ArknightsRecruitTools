@@ -27,7 +27,7 @@ request body样例
 ```
 
 注：tags字段中包换的tag数量应该在5个以内且不应出现非法的tag，否则将返回推荐失败  
-request body样例 
+response body样例 
 
 ```json
 {
